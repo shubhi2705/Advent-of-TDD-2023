@@ -8,12 +8,14 @@ namespace AdventOfCodeTDD
     {
         public static void Main()
         {
+            var obj = new Calibration();
+            obj.CalibrationDocument();
         }
-        public void CalibrationDocument()
+        public void CalibrationDocument(string file="")
         {
             try
             {
-                string file = @"C:\Users\myfile1.txt";
+                file = @"C:\Users\myfile.txt";
                 if (File.Exists(file))
                 {
                     // Store each line in array of strings 
@@ -41,23 +43,38 @@ namespace AdventOfCodeTDD
         {
             var list = new List<char>();
             var num= 0;
-            foreach (var s in value)
+            var newVal = value.Replace("oneight", "18");
+            newVal = newVal.Replace("twone", "21");
+            newVal = newVal.Replace("eightwo", "82");
+            newVal=newVal.Replace("one", "1");
+            newVal= newVal.Replace("two", "2");
+            newVal= newVal.Replace("three", "3");
+            newVal= newVal.Replace("four", "4");
+            newVal= newVal.Replace("five", "5");
+            newVal= newVal.Replace("six", "6");
+            newVal= newVal.Replace("seven", "7");
+            newVal= newVal.Replace("eight", "8");
+            newVal= newVal.Replace("nine", "9");
+            newVal= newVal.Replace("zero", "0");
+
+            foreach (var ch in newVal)
             {
-                if (s >= '0' && s <= '9')
+                if(ch>='0' && ch <= '9')
                 {
-                    list.Add(s);
+                    list.Add(ch);
                 }
             }
-            if (list.Count == 1)
+            if (list.Count() == 1)
             {
-                list.Add(list.FirstOrDefault());
+                list.Add(list.FirstOrDefault());  
             }
-            if (list.Count != 0)
+            if (list.Count() != 0)
             {
                 num = Convert.ToInt32(list.FirstOrDefault().ToString() + list.LastOrDefault().ToString());
             }
-
             return num;
         }
+
+
     }
 }
