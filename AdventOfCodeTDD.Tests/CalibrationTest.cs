@@ -2,6 +2,9 @@ using AdventOfCodeTDD;
 
 namespace AdventOfCodeTDD.Tests
 {
+    /// <summary>
+    /// Test File
+    /// </summary>
     [TestFixture]
     public class CalibrationTest
     {
