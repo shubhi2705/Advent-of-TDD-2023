@@ -75,10 +75,39 @@ namespace AdventOfCodeTDD.Tests
             EngineDetails check=new EngineDetails();
             check.SymbolsInRow(0,"..123....456..");
             check.PartNumbersInRow(0,"..123....456..");
-            check.SymbolsInRow(1,".*123....456..");
-            check.PartNumbersInRow(1,".*123....456..");
+            check.SymbolsInRow(1,"..123....456..");
+            check.PartNumbersInRow(1,"..123....456..");
+            check.SymbolsInRow(2,"..123...$456..");
+            check.PartNumbersInRow(2,"..123...$456..");
             var value=check.SumofEngineParts();
-            Assert.AreEqual(246,value);
+            Assert.AreEqual(912,value);
         }
-    
+
+        [Test]
+        public void CheckGearRatioValue()
+        {
+            EngineDetails check=new EngineDetails();
+            check.SymbolsInRow(0,"..123....456..");
+            check.PartNumbersInRow(0,"..123....456..");
+            check.SymbolsInRow(1,"..123....456..");
+            check.PartNumbersInRow(1,"..123....456..");
+            check.SymbolsInRow(2,"..123...$456..");
+            check.PartNumbersInRow(2,"..123...$456..");
+            var value=check.SumofGearRatios();
+            Assert.AreEqual(207936,value);
+        }
+
+         [Test]
+        public void CheckGearRatioValueNoGear()
+        {
+            EngineDetails check=new EngineDetails();
+            check.SymbolsInRow(0,"..123..&234...*456..");
+            check.PartNumbersInRow(0,"..123..&234...*456..");
+            check.SymbolsInRow(1,"..123.........");
+            check.PartNumbersInRow(1,"..123.........");
+            check.SymbolsInRow(2,"..123...$456..");
+            check.PartNumbersInRow(2,"..123...$456..");
+            var value=check.SumofGearRatios();
+            Assert.AreEqual(0,value);
+        }
 }
