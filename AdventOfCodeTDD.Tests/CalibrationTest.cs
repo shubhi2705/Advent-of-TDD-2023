@@ -6,8 +6,10 @@ namespace AdventOfCodeTDD.Tests
     public class CalibrationTest
     {
         [Test]
-        public void Test1()
+        public void NoSymbolsInRow()
         {
+            EngineDetails check=new EngineDetails();
+            check.
             
         }
         [Test]
