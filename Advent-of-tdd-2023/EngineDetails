@@ -5,7 +5,7 @@ public class EngineDetails
 
     public void ReadData(string FileName)
     {
-        string file=@"C:\Downloads\TDD\Day3"+FileName";
+        string file=@"C:\Downloads\TDD\Day3\"+FileName";
         if(File.Exist(file))
         {
             string[] allLines=File.ReadAllLines(file);
