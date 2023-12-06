@@ -24,14 +24,24 @@ namespace AdventOfCodeTDD.Tests
         public void NoNumbersInRow()
         {
             EngineDetails check=new EngineDetails();
-            check.NumbersInRow(0,"$*..$..");
+            check.PartNumbersInRow(0,"$*..$..");
             Assert.AreEqual(0,check.parts.Count());
             
         }
         [Test]
-        public void Test2()
+        public void ValidNumberInFirstRow()
         {
+            EngineDetails check=new EngineDetails();
+            check.PartNumbersInRow(0,"$*123...*456..");
+            Assert.AreEqual(2,check.parts.Count());
+        }
 
+        [Test]
+        public void ValidSymbolInFirstRow()
+        {
+            EngineDetails check=new EngineDetails();
+            check.SymbolsInRow(0,"$*123...*456..");
+            Assert.AreEqual(3,check.parts.Count());
         }
     }
 }
