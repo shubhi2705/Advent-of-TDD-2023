@@ -9,7 +9,8 @@ namespace AdventOfCodeTDD.Tests
         public void NoSymbolsInRow()
         {
             EngineDetails check=new EngineDetails();
-            check.
+            check.SymbolsInRow(0,"988..345..");
+            Assert.AreEqual(0,check.symbols.Count());
             
         }
         [Test]
