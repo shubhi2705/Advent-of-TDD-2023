@@ -3,7 +3,7 @@ using AdventOfCodeTDD;
 namespace AdventOfCodeTDD.Tests
 {
     [TestFixture]
-    public class CalibrationTest
+    public class AlamnacAndGardeningTest
     {
         [Test]
         public void Test1()
