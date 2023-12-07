@@ -9,10 +9,10 @@ namespace AdventOfCodeTDD
     {
         public static void Main()
         {
-           EngineDetail data=new EngineDetail();
-           data.ReadData("myfile.txt");
-           Console.WriteLine("Sum of Valid Parts is {0}",data.SumofEngineParts());
-           Console.WriteLine("Sum of Gear Ratios is {0}",data.SumofGearRatios());
+            Engine data = new Engine();
+            data.ReadData("engine.txt");
+            Console.WriteLine("Sum of Valid Parts is {0}", data.SumofEngineParts());
+            Console.WriteLine("Sum of Gear Ratios is {0}", data.SumofGearRatios());
                              
         }
     }
