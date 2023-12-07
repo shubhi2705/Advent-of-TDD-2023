@@ -2,109 +2,160 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCodeTDD
 {
-  public class CamelGames{
+ enum CardValues
+ {
+     FiveofAkind,
+     FourofAkind,
+     FullHouse,
+     ThreeofAkind,
+     twoPair,
+     OnePair,
+     HighCard
 
-    public int bidAmount;
-    public int rank;
-    public string HandValue;
+ }
+ public class CamelGame
+ {
 
-    public List<string> hands=new List<string>();
-    public List<int> bids=new List<int>();
-    public List<CamelGames> hands=new List<CamelGames>();
+     public int bidAmount;
+     public int rank;
+     public string cardFaceValue;
+     public string HandValue;
 
-  public void ReadData(string FileName)
-    {
-        string file=@"C:\Downloads\TDD\Day7\"+FileName";
-        if(File.Exist(file))
-        {
-            string[] allLines=File.ReadAllLines(file);
-            foreach(var line in allLines)
-            {
-              String[] splitted=line.Split(" ");
-              foreach(string value in splitted)
-              {
-                if(!string.IsNullOrEmpty(value))
-                {
-                  if(!Regex.IsMatch(value,@"^[0-9]+$"))
-                  {
-                    hands.Add(value);
-                  }
-                  else
-                  {
-                    int i=int.Parse(value);
-                    bids.Add(i);
-                  }
-                }
-              }
-            }
+     public List<string> hands = new List<string>();
+     public List<int> bids = new List<int>();
+     public List<CamelGame> games = new List<CamelGame>();
 
-          for(int i=0;i<bids.Count;i++)
-          {
-            CamelGames game=new CamelGames();
-            game.bidAmount=bids[i];
-            game.Handvalue=hands[i];
-            games.Add(game);
-          }          
-        }
-        else
-        {
-            throw new FileNotFoundException();
-        }
-    }
+     public void ReadData(string FileName)
+     {
+         string file = @"C:\Users\MSUSERSL123\Documents\Data\" + FileName;
+         if (File.Exists(file))
+         {
+             string[] allLines = File.ReadAllLines(file);
+             foreach (var line in allLines)
+             {
+                 String[] splitted = line.Split(" ");
+                 foreach (string value in splitted)
+                 {
+                     if (!string.IsNullOrEmpty(value))
+                     {
+                         if (!Regex.IsMatch(value, @"^[0-9]+$"))
+                         {
+                             hands.Add(value);
+                         }
+                         else
+                         {
+                             int i = int.Parse(value);
+                             bids.Add(i);
+                         }
+                     }
+                 }
+             }
 
-  public int CheckRank()
-  {
-    int sum=0;
-    foreach(var game in games)
-    {
-      string data=game.Handvalue;
-      Dictionary<char,int> alphabetCount=new Dictionary<char,int>();
-      for(int i=0;i<data.Length;i++)
-      {
-        if(alphabetCount.ContainsKey(data[i]))
-           {
-             alphabetCount[data[i]]++;
-           }
-           else
-           {
-             alphabetCount[data[i]]=1;
-           }   
-      }
+             for (int i = 0; i < bids.Count; i++)
+             {
+                 CamelGame game = new CamelGame();
+                 game.bidAmount = bids[i];
+                 game.HandValue = hands[i];
+                 games.Add(game);
+             }
+         }
+         else
+         {
+             throw new FileNotFoundException();
+         }
+     }
 
-      switch(alphabetCount.Count)
-      {
-          case1:
-          game.rank=5;
-          break;
-        case 2:
-          if(alphabetCount.ContainsValue(4))
-          { game.rank=4;}
-          else
-          {
-            game.rank=3;
-          }
-          break;
-          case 3:
-          if(alphabetCount.ContainsValue(3))
-          { game.rank=3;}
-          else
-          {game.rank=2;
-          }
-          break;
-        case 4: 
-          if(alphabetCount.ContainsValue(2))
-          game.rank=2;
-          break
-          case 5:
-          game.rank=1;
-          break;
-      }
-    }
-      foreach(var game in games)
-      {
-        sum=sum+(game.rank * game.bidAmount);
-      }
-    }
-  
-}
+     public int CheckRank()
+     {
+         int sum = 0;
+         foreach (var game in games)
+         {
+             string cardValue = GetCardValue(game);
+             game.cardFaceValue = cardValue;
+         }
+
+         var highCardList = games.Where(x => x.cardFaceValue == CardValues.HighCard.ToString()).ToList();
+         findRanks (highCardList);
+         var onePairsList = games.Where(x => x.cardFaceValue == CardValues.OnePair.ToString()).ToList();
+         findRanks(onePairsList);
+         var twoPairsList = games.Where(x => x.cardFaceValue == CardValues.twoPair.ToString()).ToList();
+         findRanks(twoPairsList);
+         var threeOfList = games.Where(x => x.cardFaceValue == CardValues.ThreeofAkind.ToString()).ToList();
+         findRanks(threeOfList);
+         var fullHouseList = games.Where(x => x.cardFaceValue == CardValues.FullHouse.ToString()).ToList();
+         findRanks(fullHouseList);
+         var fourOfList = games.Where(x => x.cardFaceValue == CardValues.FourofAkind.ToString()).ToList();
+         findRanks(fourOfList);
+         var fiveOfList = games.Where(x => x.cardFaceValue == CardValues.FiveofAkind.ToString()).ToList();
+         findRanks(fiveOfList);
+
+         foreach (var game in games)
+         {
+             sum = sum + (game.rank * game.bidAmount);
+         }
+         return sum;
+     }
+
+     public void findRanks(List<CamelGame> pairsList)
+     {
+         int maxRank = games.Max(x => x.rank);
+         var formedList=pairsList.OrderByDescending(x => x.HandValue).ToList();
+         foreach (var item in formedList)
+         {
+             item.rank = maxRank + 1;
+             maxRank++;
+         }
+
+     }
+     public string GetCardValue(CamelGame game)
+     {
+         string type = string.Empty;
+         string data = game.HandValue;
+         Dictionary<char, int> alphabetCount = new Dictionary<char, int>();
+         for (int i = 0; i < data.Length; i++)
+         {
+             if (alphabetCount.ContainsKey(data[i]))
+             {
+                 alphabetCount[data[i]]++;
+             }
+             else
+             {
+                 alphabetCount[data[i]] = 1;
+             }
+         }
+
+
+         switch (alphabetCount.Count)
+         {
+             case 1:
+                 type = CardValues.FiveofAkind.ToString();
+                 break;
+             case 2:
+                 if (alphabetCount.ContainsValue(4))
+                 { type = CardValues.FourofAkind.ToString(); }
+                 else
+                 {
+                     type = CardValues.FullHouse.ToString();
+                 }
+                 break;
+             case 3:
+                 if (alphabetCount.ContainsValue(3))
+                 { type = CardValues.ThreeofAkind.ToString(); }
+                 else
+                 {
+                     type = CardValues.twoPair.ToString();
+                 }
+                 break;
+             case 4:
+                 type = CardValues.OnePair.ToString();
+                 break;
+             case 5:
+                 type = CardValues.HighCard.ToString();
+                 break;
+         }
+
+         return type;
+     }
+
+ }
 }
