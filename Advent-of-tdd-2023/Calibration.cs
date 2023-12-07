@@ -8,6 +8,10 @@ namespace AdventOfCodeTDD
     {
         public static void Main()
         {
+           CamelGames camelgame=new CamelGames();
+           camelgame.ReadData("Game.txt");
+           int finalValue=camelgame.CheckRank();
+           Console.WriteLine("Final ways are {0}",finalValue);
         }
     }
 }
