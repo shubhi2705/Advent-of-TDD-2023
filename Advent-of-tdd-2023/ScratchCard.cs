@@ -1,9 +1,9 @@
-public class ScratcCards
+public class ScratchCards
 {
   int winningPoints = 0;
   int cardNo = 0;
-  List<int> card Numbers = new List<int>();
-  List<int> winning Numbers = new List<int>();
+  List<int> cardNumbers = new List<int>();
+  List<int> winningNumbers = new List<int>();
   public ScratchCards()
   {
     
@@ -11,7 +11,7 @@ public class ScratcCards
   public ScratchCards(int cardNo, List<int> winning Numbers, List<int> cardNumbers)
   {
     this.cardNo = cardNo;
-    this.winning Numbers = winning Numbers;
+    this.winning Numbers = winningNumbers;
     this.cardNumbers = cardNumbers;
   }
 
@@ -19,7 +19,7 @@ public class ScratcCards
   {
     string file = @"C:\MSDE\POC\TDD\ScratchCard.txt";
     var obj = new ScratchCards();
-    obj. TotalPoints(file);
+    obj.TotalPoints(file);
   }
   public int get TotalCards (string file = "")
   {
@@ -32,7 +32,8 @@ public class ScratcCards
     {
       throw new FileNotFoundExecption();
     }
-    
+
+    //check if card has winner
     public bool isWinner_in_Card()
     {
       foreach(var card in cardNumbers)
@@ -44,6 +45,8 @@ public class ScratcCards
       }
       return false;
     }
+
+    //Get total winning points for each card
     public int GetTotalPoints_In_EachCardNumber(List<int> winningNumbers, List<int> cardNumbers)
     {
      int result = 0;
@@ -70,6 +73,7 @@ public class ScratcCards
       return result;
     }
 
+    //total worth winning points
     public int TotalPoints(string file)
     { 
       string[] lines ={};
