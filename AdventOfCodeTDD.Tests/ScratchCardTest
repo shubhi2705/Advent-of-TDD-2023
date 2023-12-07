@@ -1,3 +1,4 @@
+using AdventOfCodeTDD;
 namespace ScratchCardTest
 {
     public class ScratchCardTest()
