@@ -97,16 +97,25 @@ namespace AdventOfCodeTDD
      }
 
      public void findRanks(List<CamelGame> pairsList)
-     {
-         int maxRank = games.Max(x => x.rank);
-         var formedList=pairsList.OrderByDescending(x => x.HandValue).ToList();
-         foreach (var item in formedList)
-         {
-             item.rank = maxRank + 1;
-             maxRank++;
-         }
+ {
+     int maxRank = games.Max(x => x.rank);
+     var alphabetList = pairsList.Where(s => char.IsLetter(s.HandValue.FirstOrDefault())).ToList();
+     var numberList = pairsList.Where(s => char.IsDigit(s.HandValue.FirstOrDefault())).ToList();
 
+     var formednumList =numberList.OrderBy(x => x.HandValue).ToList();
+     var formedalphaList = alphabetList.OrderByDescending(x => x.HandValue).ToList();
+     foreach (var item in formednumList)
+     {
+         item.rank = maxRank + 1;
+         maxRank++;
      }
+     foreach (var item in formedalphaList)
+     {
+         item.rank = maxRank + 1;
+         maxRank++;
+     }
+
+ }
      public string GetCardValue(CamelGame game)
      {
          string type = string.Empty;
