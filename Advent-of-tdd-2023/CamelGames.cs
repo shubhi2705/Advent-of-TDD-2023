@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace 
+namespace AdventOfCodeTDD
 {
   public class CamelGames{
   }
