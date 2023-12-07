@@ -95,11 +95,11 @@ public class ScratchCards
           cardNumbers=new List<int>();
           winningNumbers = new List<int>();
           TotalCardNumbers.Add(List[i][1].ToString().Split('|'));
-           foreach(var wn in TotalCardNumbers[i][0].Trim().Split(' '))
+           foreach(var wn in TotalCardNumbers[i][0].Replace("  "," ").Trim().Split(' '))
            {
              winningNumbers.Add(int.Parse(wn));
            }
-            foreach(var wn in TotalCardNumbers[i][1].Trim().Split(' '))
+            foreach(var wn in TotalCardNumbers[i][1].Replace("  "," ").Trim().Split(' '))
            {
              cardNumbers.Add(int.Parse(wn));
            }
