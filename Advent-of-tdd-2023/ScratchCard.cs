@@ -21,7 +21,7 @@ public class ScratchCards
 
     public static void Main()
     {
-        string file = @"C:\MSDE\POC\TDD\ScratchCard.txt";
+        string file = @"C:\Users\Administrator\Documents\TDD\ScratchCardInput.txt"; 
         var obj = new ScratchCards();
         obj.TotalPoints(file);
     }
@@ -72,7 +72,7 @@ public class ScratchCards
             }
             else
             {
-                result = 2;//doubling the subsequent matches
+                result *= 2;//doubling the subsequent matches
             }
         }
         return result;
