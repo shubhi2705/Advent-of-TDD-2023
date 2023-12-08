@@ -1,76 +1,82 @@
-using AdventOfCodeTDD;
-namespace ScratchCardTest
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
+
+namespace AdventOfCodeTDD
 {
-    public class ScratchCardTest()
+    [TestClass]
+    public class ScratchCardTest
     {
-      [Test]
-      public void Input_File_Not_Found_Exception()
-      {
-        stringfile = @"C:\MSDE\TDD\ScratchCard.txt;
-        ScratchCards card = new ScratchCards();
-        var ex Assert.Throws<FileNotFoundException>()=>card.getTotalCards(file));
-        Assert.That(ex.FileName,Is.EqualTo(null));
-      }
 
-      [Test]
-      public void getTotalCard_In_File()
-      {
-        stringfile = @"C:\MSDE\POC\TDD\ScratchCard.txt;
-        ScratchCards card = new ScratchCards();
-        Assert.That(card.getTotalCards(file),Is.EqualTo(6));
-      }
+        [TestMethod]
+        public void Input_File_Not_Found_Exception()
+        {
+            string file = @"C:\MSDE\TDD\ScratchCard.txt";
+            ScratchCards card = new ScratchCards();
+            var ex = Assert.ThrowsException<FileNotFoundException>(()=>card.getTotalCards(file));
+            Assert.AreEqual(ex.FileName, null);
+        }
 
-      [Test]
-      public void cardnumber_has_winninglist()
-      {
-        //card 1: 41 48 83 86 17 | 83 86 6 17 9 48 53
-        List<int> winningList = new List<int>{41,48,83,86,17};
-        List<int> cardNumbers = new List<int>{83,86,6,17,9,48,53};
-        ScratchCards scratchCards = new ScratchCards(1,winningList,cardNumbers);
-        Assert.True(scratchCards.isWinner_in_Card());
-      }
-      [Test]
-      public void cardnumber_has_no_winninglist()
-      {
-        //card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
-        List<int> winningList = new List<int>{87, 83, 26, 28, 32};
-        List<int> cardNumbers = new List<int>{88, 30, 70, 12, 93, 22, 82, 36};
-        ScratchCards scratchCards = new ScratchCards(5,winningList,cardNumbers);
-        Assert.False(scratchCards.isWinner_in_Card());
-      }
-      [Test]
-      public void calculate_points_foreach_cardNumber()
-      {
-        //card 1: 41 48 83 86 17 | 83 86 6 17 9 48 53
-        List<int> winningList = new List<int>{41,48,83,86,17};
-        List<int> cardNumbers = new List<int>{83,86,6,17,9,48,53};
-        ScratchCards scratchCards = new ScratchCards(1,winningList,cardNumbers);
-        Assert.That(scratchCards.GetTotalPonits_In_EachCardNumber(winningList,cardNumbers),Is.EqualTo(8));
-      }
-      [Test]
-      public void calculate_points_foreach_cardNumber_with_one_point()
-      {
-        //card 4: 41 92 73 84 69 | 59 84 76 51 58 5 54 83
-        List<int> winningList = new List<int>{41, 92, 73, 84, 69};
-        List<int> cardNumbers = new List<int>{59, 84, 76, 51, 58, 5, 54, 83};
-         ScratchCards scratchCards = new ScratchCards(1,winningList,cardNumbers);
-        Assert.That(scratchCards.GetTotalPonits_In_EachCardNumber(winningList,cardNumbers)Is.EqualTo(1));
-      }
-      [Test]
-      public void calculate_points_foreach_cardNumber_with_zero_point()
-      {
-        //card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
-        List<int> winningList = new List<int>{87, 83, 26, 28, 32};
-        List<int> cardNumbers = new List<int>{88, 30, 70, 12, 93, 22, 82, 36};
-        ScratchCards scratchCards = new ScratchCards(1,winningList,cardNumbers);
-        Assert.That(scratchCards.GetTotalPonits_In_EachCardNumber(winningList,cardNumbers),Is.EqualTo(0));
-      }
-      [Test]
-      public void calculate_total_ponts_worth_in_scartchcardlist()
-      {
-        stringfile = @"C:\MSDE\POC\TDD\ScratchCard.txt;
-        ScratchCards card = new ScratchCards();
-        Assert.That(card.TotalPoints(file),Is.EqualTo(13));
-      }
+         [TestMethod]
+        public void getTotalCard_In_File()
+        {
+            string file = @"C:\Users\Administrator\Documents\TDD\ScratchCardInput.txt";
+            ScratchCards card = new ScratchCards();
+            Assert.AreEqual(card.getTotalCards(file), 212);
+        }
+
+         [TestMethod]
+        public void cardnumber_has_winninglist()
+        {
+            //card 1: 41 48 83 86 17 | 83 86 6 17 9 48 53
+            List<int> winningList = new List<int> { 41, 48, 83, 86, 17 };
+            List<int> cardNumbers = new List<int> { 83, 86, 6, 17, 9, 48, 53 };
+            ScratchCards scratchCards = new ScratchCards(1, winningList, cardNumbers);
+            Assert.IsTrue(scratchCards.isWinner_in_Card());
+        }
+         [TestMethod]
+        public void cardnumber_has_no_winninglist()
+        {
+            //card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
+            List<int> winningList = new List<int> { 87, 83, 26, 28, 32 };
+            List<int> cardNumbers = new List<int> { 88, 30, 70, 12, 93, 22, 82, 36 };
+            ScratchCards scratchCards = new ScratchCards(5, winningList, cardNumbers);
+            Assert.IsFalse(scratchCards.isWinner_in_Card());
+        }
+         [TestMethod]
+        public void calculate_points_foreach_cardNumber()
+        {
+            //card 1: 41 48 83 86 17 | 83 86 6 17 9 48 53
+            List<int> winningList = new List<int> { 41, 48, 83, 86, 17};
+            List<int> cardNumbers = new List<int> { 83, 86, 6, 17, 9, 48, 53};
+            ScratchCards scratchCards = new ScratchCards(1, winningList, cardNumbers);
+            Assert.AreEqual(scratchCards.GetTotalPoints_In_EachCardNumber(winningList, cardNumbers), 8);
+        }
+         [TestMethod]
+        public void calculate_points_foreach_cardNumber_with_one_point()
+        {
+            //card 4: 41 92 73 84 69 | 59 84 76 51 58 5 54 83
+            List<int> winningList = new List<int> { 41, 92, 73, 84, 69 };
+            List<int> cardNumbers = new List<int> { 59, 84, 76, 51, 58, 5, 54, 83 };
+            ScratchCards scratchCards = new ScratchCards(1, winningList, cardNumbers);
+            Assert.AreEqual(scratchCards.GetTotalPoints_In_EachCardNumber(winningList, cardNumbers),1);
+        }
+         [TestMethod]
+        public void calculate_points_foreach_cardNumber_with_zero_point()
+        {
+            //card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
+            List<int> winningList = new List<int> { 87, 83, 26, 28, 32 };
+            List<int> cardNumbers = new List<int> { 88, 30, 70, 12, 93, 22, 82, 36 };
+            ScratchCards scratchCards = new ScratchCards(1, winningList, cardNumbers);
+            Assert.AreEqual(scratchCards.GetTotalPoints_In_EachCardNumber(winningList, cardNumbers), 0);
+        }
+         [TestMethod]
+        public void calculate_total_points_worth_in_scartchcardlist()
+        {
+            string file = @"C:\Users\Administrator\Documents\TDD\ScratchCardInput.txt";
+            ScratchCards card = new ScratchCards();
+            Assert.AreEqual(card.TotalPoints(file), 25010);
+        }
     }
 }
+
