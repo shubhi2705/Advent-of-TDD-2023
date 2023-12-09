@@ -3,12 +3,12 @@ using AdventOfCodeTDD;
 namespace AdventOfCodeTDD.Tests
 {
     [TestFixture]
-    public class NavigationTest
+    public class NavigationTest_1
     {
         [Test]
         public void calculate_steps_for_the_given_input_1()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directionInput = "RL";
             var directions = directionInput.ToCharArray().Select(t => "LR".IndexOf(t)).ToArray();
             var navigations = new Dictionary<string, string[]>();
@@ -26,7 +26,7 @@ namespace AdventOfCodeTDD.Tests
         [Test]
         public void calculate_steps_for_the_given_input_2()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directionInput = "LLR";
             var directions = directionInput.ToCharArray().Select(t => "LR".IndexOf(t)).ToArray();
             var navigations = new Dictionary<string, string[]>();
@@ -41,7 +41,7 @@ namespace AdventOfCodeTDD.Tests
         [Test]
         public void calculate_steps_for_the_given_input_3()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directionInput = "LLR";
             var directions = directionInput.ToCharArray().Select(t => "LR".IndexOf(t)).ToArray();
             var navigations = new Dictionary<string, string[]>();
@@ -55,7 +55,7 @@ namespace AdventOfCodeTDD.Tests
         [Test]
         public void calculate_steps_for_the_given_input_4()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directionInput = "L";
             var directions = directionInput.ToCharArray().Select(t => "LR".IndexOf(t)).ToArray();
             var navigations = new Dictionary<string, string[]>();
@@ -65,7 +65,7 @@ namespace AdventOfCodeTDD.Tests
         [Test]
         public void calculate_steps_for_the_given_input_5()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directionInput = "L";
             var directions = directionInput.ToCharArray().Select(t => "LR".IndexOf(t)).ToArray();
             var navigations = new Dictionary<string, string[]>();
@@ -77,7 +77,7 @@ namespace AdventOfCodeTDD.Tests
         [Test]
         public void check_exception_when_directions_are_not_provided()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directions = new int[] { };
             var file = "input.txt";
             Assert.Throws<ArgumentNullException>(() => nav.calculateSteps(directions, file));
@@ -86,7 +86,7 @@ namespace AdventOfCodeTDD.Tests
         [Test]
         public void check_exception_when_filepath_is_invalid()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directions = new int[] { 0,1};
             var file = "input.txt";
             Assert.Throws<FileNotFoundException>(() => nav.calculateSteps(directions, file));
@@ -95,7 +95,7 @@ namespace AdventOfCodeTDD.Tests
         [Test]
         public void check_exception_when_file_is_empty()
         {
-            var nav = new Navigation();
+            var nav = new Navigation_1();
             var directions = new int[] { 0, 1 };
             var file = @"C:\Users\Empty.txt";
             Assert.Throws<InvalidDataException>(() => nav.calculateSteps(directions, file));
