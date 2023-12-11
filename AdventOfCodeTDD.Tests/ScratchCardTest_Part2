@@ -1,1 +1,45 @@
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
+
+namespace TDDTest
+{
+    [TestClass]
+    public class ScratchCardTest_Part2
+    {
+
+        [TestMethod]
+        public void Input_File_Not_Found_Exception()
+        {
+            string file = @"C:\MSDE\TDD\ScratchCard.txt";
+            ScratchCards card = new ScratchCards();
+            var ex = Assert.ThrowsException<FileNotFoundException>(() => card.getTotalCards(file));
+            Assert.AreEqual(ex.FileName, null);
+        }
+
+        [TestMethod]
+        public void getTotalCard_In_File()
+        {
+            string file = @"C:\Users\Administrator\Documents\TDD\ScratchCardInput.txt";
+            ScratchCards card = new ScratchCards();
+            Assert.AreEqual(card.getTotalCards(file), 212);
+        }
+
+        [TestMethod]
+        public void calculateTotalScratchCards()
+        {
+            string file = @"C:\Users\Administrator\Documents\TDD\ScratchCardInput.txt";
+            ScratchCards card = new ScratchCards();
+            Assert.AreEqual(card.TotalScratchCards(file), 9924412);
+        }
+        [TestMethod]
+        public void calculateTotalScratchCards_Failure()
+        {
+            string file = @"C:\Users\Administrator\Documents\TDD\ScratchCardInput.txt";
+            ScratchCards card = new ScratchCards();
+            Assert.AreNotEqual(card.TotalScratchCards(file), 9924212);
+        }
+    }
+}
+
