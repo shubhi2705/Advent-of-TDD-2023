@@ -44,7 +44,7 @@ public class ScratchCards
         }
     }
 
-    //total worth winning points
+    //total scratch cards calulation
     public int TotalScratchCards(string file)
     {
         int totalScratchCards = 0;
@@ -101,6 +101,7 @@ public class ScratchCards
         return totalScratchCards;
     }
 
+    //Making copies
     private int ScratchCard(Tuple<int, List<int>, List<int>> result, int val)
     {
         copyFinalList.AddRange(result.Item2);
