@@ -1,26 +1,171 @@
 namespace AdventOfCodeTDD
 {
-    public class CamelGames {
-        public static void Main()
-        {
-            var cg = new CamelGames();
-            var STRENGTHS = "AKQJT98765432";
-            var strengths = ("abcdefghijklm").Reverse();
-            var rev_strength = string.Join("", strengths);
+      enum CardValues
+  {
+      FiveofAkind,
+      FourofAkind,
+      FullHouse,
+      ThreeofAkind,
+      twoPair,
+      OnePair,
+      HighCard
 
-            var highcards = new List<List<Bid>>();
-            var onepairs = new List<List<Bid>>();
-            var twopairs = new List<List<Bid>>();
-            var threesomes = new List<List<Bid>>();
-            var fullhouses = new List<List<Bid>>();
-            var foursomes = new List<List<Bid>>();
-            var fivesomes = new List<List<Bid>>();
+  }
+  public class CamelGame
+  {
 
-            var allLists = new List<List<List<Bid>>> { highcards, onepairs, twopairs, threesomes, fullhouses, foursomes, fivesomes };
-
-           var input= cg.processInput(STRENGTHS, rev_strength);
+      public int bidAmount;
+      public int rank;
+      public string cardFaceValue;
+      public string HandValue;
 
 
+      public List<string> hands = new List<string>();
+      public List<int> bids = new List<int>();
+      public List<CamelGame> games = new List<CamelGame>();
+
+      public void ReadData(string FileName)
+      {
+          string file = @"C:\Users\MSUSERSL123\Documents\Data\" + FileName;
+          if (File.Exists(file))
+          {
+              string[] allLines = File.ReadAllLines(file);
+              foreach (var line in allLines)
+              {
+                  String[] splitted = line.Split(" ");
+                  foreach (string value in splitted)
+                  {
+                      if (!string.IsNullOrEmpty(value))
+                      {
+                          if (!Regex.IsMatch(value, @"^[0-9]+$"))
+                          {
+                              hands.Add(value);
+                          }
+                          else
+                          {
+                              int i = int.Parse(value);
+                              bids.Add(i);
+                          }
+                      }
+                  }
+              }
+
+              for (int i = 0; i < hands.Count; i++)
+              {
+                  CamelGame game = new CamelGame();
+                  game.bidAmount = bids[i];
+                  game.HandValue = hands[i];
+                  games.Add(game);
+              }
+          }
+          else
+          {
+              throw new FileNotFoundException();
+          }
+      }
+
+      public Int64 CheckRank()
+      {
+          Int64 sum = 0;
+          foreach (var game in games)
+          {
+              string cardValue = GetCardValue(game);
+              game.cardFaceValue = cardValue;
+          }
+
+          var highCardList = games.Where(x => x.cardFaceValue == CardValues.HighCard.ToString()).ToList();
+          findRanks (highCardList);
+          var onePairsList = games.Where(x => x.cardFaceValue == CardValues.OnePair.ToString()).ToList();
+          findRanks(onePairsList);
+          var twoPairsList = games.Where(x => x.cardFaceValue == CardValues.twoPair.ToString()).ToList();
+          findRanks(twoPairsList);
+          var threeOfList = games.Where(x => x.cardFaceValue == CardValues.ThreeofAkind.ToString()).ToList();
+          findRanks(threeOfList);
+          var fullHouseList = games.Where(x => x.cardFaceValue == CardValues.FullHouse.ToString()).ToList();
+          findRanks(fullHouseList);
+          var fourOfList = games.Where(x => x.cardFaceValue == CardValues.FourofAkind.ToString()).ToList();
+          findRanks(fourOfList);
+          var fiveOfList = games.Where(x => x.cardFaceValue == CardValues.FiveofAkind.ToString()).ToList();
+          findRanks(fiveOfList);
+
+          foreach (var game in games)
+          {
+              sum = sum + (game.rank * game.bidAmount);
+          }
+          return sum;
+      }
+
+      public void findRanks(List<CamelGame> pairsList)
+      {
+          int maxRank = games.Max(x => x.rank);
+          var alphabetList = pairsList.Where(s => char.IsLetter(s.HandValue.FirstOrDefault())).ToList();
+          var numberList = pairsList.Where(s => char.IsDigit(s.HandValue.FirstOrDefault())).ToList();
+
+          var formednumList =numberList.OrderBy(x => x.HandValue).ToList();
+          var formedalphaList = alphabetList.OrderByDescending(x => x.HandValue).ToList();
+          foreach (var item in formednumList)
+          {
+              item.rank = maxRank + 1;
+              maxRank++;
+          }
+          foreach (var item in formedalphaList)
+          {
+              item.rank = maxRank + 1;
+              maxRank++;
+          }
+
+      }
+      public string GetCardValue(CamelGame game)
+      {
+          string type = string.Empty;
+          string data = game.HandValue;
+          Dictionary<char, int> alphabetCount = new Dictionary<char, int>();
+          for (int i = 0; i < data.Length; i++)
+          {
+              if (alphabetCount.ContainsKey(data[i]))
+              {
+                  alphabetCount[data[i]]++;
+              }
+              else
+              {
+                  alphabetCount[data[i]] = 1;
+              }
+          }
+
+
+          switch (alphabetCount.Count)
+          {
+              case 1:
+                  type = CardValues.FiveofAkind.ToString();
+                  break;
+              case 2:
+                  if (alphabetCount.ContainsValue(4))
+                  { type = CardValues.FourofAkind.ToString(); }
+                  else
+                  {
+                      type = CardValues.FullHouse.ToString();
+                  }
+                  break;
+              case 3:
+                  if (alphabetCount.ContainsValue(3))
+                  { type = CardValues.ThreeofAkind.ToString(); }
+                  else
+                  {
+                      type = CardValues.twoPair.ToString();
+                  }
+                  break;
+              case 4:
+                  type = CardValues.OnePair.ToString();
+                  break;
+              case 5:
+                  type = CardValues.HighCard.ToString();
+                  break;
+          }
+
+          return type;
+      }
+
+  }
             foreach (var list in allLists) {
 
                 for (int n = 0; n < STRENGTHS.Length; n++) {
