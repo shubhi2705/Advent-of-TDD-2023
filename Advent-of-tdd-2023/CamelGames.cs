@@ -339,5 +339,13 @@ namespace AdventOfCodeTDD
         public int bid;
     }
 
+public static void Main(string[] args)
+{
+      amelGame camelgame = new CamelGame();
+camelgame.ReadData("Day7.txt");
+Int64 finalValue = camelgame.CheckRank();
+Console.WriteLine("Final ways are {0}", finalValue);
+}
+
 }
 
