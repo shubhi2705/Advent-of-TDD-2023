@@ -8,11 +8,12 @@ namespace AdventOfCodeTDD
     {
         public static void Main()
         {
-           CodeCheck check = new CodeCheck();
+            CodeCheck check = new CodeCheck();
             check.ReadData("code.txt");
             var a = check.GetSum();
             Console.WriteLine($"Sum is: {a}");
-            var b = check.GetPart2Sum();
+            var steps = File.ReadAllText(@"C:\Users\MSUSERSL123\Documents\Data\code.txt").Trim().Split(',');
+            var b = check.GetPart2Sum(steps);
             Console.WriteLine(b);
         }
     }
