@@ -1,77 +1,75 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
-class SeedLocationCalculator
+class AlmanacProcessor
 {
-    private readonly string almanac;
-    private readonly List<long> seeds;
-    private readonly List<List<string>> mappings;
+    public List<int> Seeds { get; set; }
+    public List<List<List<int>>> Maps { get; set; }
 
-    public SeedLocationCalculator(string almanac)
+    public AlmanacProcessor(string almanac)
     {
-        this.almanac = almanac;
-        (seeds, mappings) = ParseInput(almanac);
+        Seeds = new List<int>();
+        Maps = new List<List<List<int>>>();
+        ParseInput(almanac);
     }
 
-    public long FindLowestLocationNumber()
+    private void ParseInput(string almanac)
     {
-        var seedLocations = new Dictionary<long, long>();
-        foreach (var seed in seeds)
+        var sections = almanac.Trim().Split("\n\n").Select(block => block.Split("\n").ToList()).ToList();
+        Seeds = sections[0][0].Split(" ").Skip(1).Select(int.Parse).ToList();
+        Maps = sections.Skip(1).Select(block => block.Skip(1).Select(line => line.Split(" ").Select(int.Parse).ToList()).ToList()).ToList();
+    }
+
+    public List<List<int>> ProcessMaps()
+    {
+        var values = Seeds.Select((_, i) => new List<int> { Seeds[i], Seeds[i] + Seeds[i + 1] }).ToList();
+
+        foreach (var map in Maps)
         {
-            var currentNumber = seed;
-            foreach (var mapData in mappings)
+            var nextMap = new List<List<int>>();
+            foreach (var (destStart, srcStart, length) in map)
             {
-                currentNumber = FindMappedNumber(currentNumber, mapData);
-            }
-            seedLocations[seed] = currentNumber;  // location of seed in the last map
-        }
-        return seedLocations.Values.Min();
-    }
-
-    private (List<long>, List<List<string>>) ParseInput(string inputData)
-    {
-        var sections = inputData.Trim().Split("\n\n");
-        var seeds = sections[0].Split(": ")[1].Split().Select(long.Parse).ToList();
-        var mappings = sections.Skip(1).Select(section => section.Split(":\n")[1].Split('\n').ToList()).ToList();
-        return (seeds, mappings);
-    }
-
-    private long FindMappedNumber(long number, List<string> mapData)
-    {
-        foreach (var line in mapData)
-        {
-            if (!string.IsNullOrWhiteSpace(line))
-            {
-                var parts = line.Split().Select(long.Parse).ToArray();
-                var destStart = parts[0];
-                var srcStart = parts[1];
-                var length = parts[2];
-                if (srcStart <= number && number < srcStart + length)
+                var nextRange = new List<List<int>>();
+                foreach (var (valLow, valHigh) in values)
                 {
-                    return destStart + (number - srcStart);
+                    var sortedBounds = new List<int> { valLow, valHigh, srcStart, srcStart + length }.OrderBy(x => x).ToList();
+                    for (int i = 0; i < sortedBounds.Count - 1; i++)
+                    {
+                        var low = sortedBounds[i];
+                        var high = sortedBounds[i + 1];
+                        if (valLow <= low && low < high && high <= valHigh)
+                        {
+                            if (srcStart <= low && low < high && high <= srcStart + length)
+                            {
+                                nextMap.Add(new List<int> { low - srcStart + destStart, high - srcStart + destStart });
+                            }
+                            else
+                            {
+                                nextRange.Add(new List<int> { low, high });
+                            }
+                        }
+                    }
                 }
+                values = nextRange;
             }
+            values.AddRange(nextMap);
         }
-        return number;
+
+        return values;
+    }
+
+    public int FindMinimumLocation(List<List<int>> values)
+    {
+        return values.Select(pair => pair[0]).Min();
     }
 }
 
 class Program
 {
-    static void Main()
-    {
-        var almanac = File.ReadAllText("input.txt");
-
-        var calculator = new SeedLocationCalculator(almanac);
-        var lowestLocation = calculator.FindLowestLocationNumber();
-        Console.WriteLine("The lowest location number is: " + lowestLocation);
-    }
-
     static void TestFindLowestLocationNumber()
     {
-        var almanac = @"seeds: 79 14 55 13
+        const string almanac = @"seeds: 79 14 55 13
 
 seed-to-soil map:
 50 98 2
@@ -103,11 +101,25 @@ temperature-to-humidity map:
 
 humidity-to-location map:
 60 56 37
-56 93 4";
+56 93 4
+";
 
-        var calculator = new SeedLocationCalculator(almanac);
-        var lowestLocation = calculator.FindLowestLocationNumber();
-        Console.WriteLine("The lowest location number is: " + lowestLocation);
+        var processor = new AlmanacProcessor(almanac);
+        var values = processor.ProcessMaps();
+        var lowestLocation = processor.FindMinimumLocation(values);
+        Console.WriteLine($"Test passed successfully: {lowestLocation == 46}");
+    }
+
+    static void Main()
+    {
+        // Read the input file
+        string almanac = System.IO.File.ReadAllText("input.txt");
+
+        var processor = new AlmanacProcessor(almanac);
+        var values = processor.ProcessMaps();
+        var minLocation = processor.FindMinimumLocation(values);
+
+        Console.WriteLine($"Minimum location number: {minLocation}");
     }
 }
 
