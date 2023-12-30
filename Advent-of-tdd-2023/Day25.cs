@@ -2,8 +2,12 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-class Day25
+public class Day25
 {
+    public Day25()
+    {
+
+    }
     List<string> allLines;
     List<string[]> edgesOriginal = new List<string[]>();
 
@@ -21,13 +25,26 @@ class Day25
     }
     static void Main(string[] args)
     {
-        Day25 day25 = new Day25();
-        day25.allLines = new List<string>(File.ReadAllLines(args[0]));
-        day25.buildGraph();
-        day25.part1();
+        string file = @"C:\Users\Administrator\Documents\InputFile\Day_25.txt";
+        var obj = new Day25();
+        obj.ProcessInputFile(file);
+        obj.buildGraph();
+        obj.snowerLoad();
     }
 
-    public void part1()
+    public void ProcessInputFile(string file)
+    {
+        if (File.Exists(file))
+        {
+            allLines = new List<string>(File.ReadAllLines(file));
+        }
+        else
+        {
+            throw new FileNotFoundException();
+        }
+    }
+
+    public int snowerLoad()
     {
         int res = -1;
 
@@ -35,7 +52,7 @@ class Day25
         {
             res = KragersMinCut();
         }
-        Console.WriteLine("Part 1: {0}", res);
+        return res;
     }
     public int KragersMinCut()
     {
